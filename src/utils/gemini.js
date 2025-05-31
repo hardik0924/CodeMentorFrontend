@@ -1,5 +1,5 @@
 export const analyzeCode = async (code) => {
-  const response = await fetch('https://codementor-backend.onrender.com', {
+  const response = await fetch('https://codementor-backend.onrender.com/api/review/generate-review', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
