@@ -1,10 +1,10 @@
 import React from 'react';
 import Header from '../components/Header';
 import Hero from '../components/Hero';
-import Features from '../components/Features';
+// import Features from '../components/Features';
 import HowItWorks from '../components/HowItWorks';
 import CodeExample from '../components/CodeExample';
-import Testimonials from '../components/Testimonials';
+// import Testimonials from '../components/Testimonials';
 
 const Home = () => {
   return (
@@ -12,10 +12,10 @@ const Home = () => {
       <Header />
       <main>
         <Hero />
-        <Features />
+        {/* <Features /> */}
         <HowItWorks />
         <CodeExample />
-        <Testimonials />
+        {/* <Testimonials /> */}
       </main>
     </div>
   );

@@ -1,28 +1,23 @@
 import { ArrowRight, XCircle, AlertTriangle, CheckCircle, Copy, Check } from 'lucide-react';
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { analyzeCode } from '../utils/gemini';
-import { marked } from "marked";
+import { marked } from 'marked';
 
 const CodeReview = () => {
-  console.log("CodeReview component rendering");
   const [code, setCode] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysis, setAnalysis] = useState(null);
   const [error, setError] = useState(null);
   const [copySuccess, setCopySuccess] = useState(false);
 
-  // For handling code copying
   const handleCopyCode = (textToCopy) => {
-    console.log("Copy button clicked", textToCopy.substring(0, 20) + "...");
     navigator.clipboard.writeText(textToCopy)
       .then(() => {
-        console.log("Copy successful");
         setCopySuccess(true);
         setTimeout(() => setCopySuccess(false), 2000);
       })
       .catch(err => {
-        console.error('Failed to copy: ', err);
-        alert("Unable to copy to clipboard: " + err);
+        alert('Unable to copy to clipboard: ' + err);
       });
   };
 
@@ -42,37 +37,31 @@ const CodeReview = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#1E1B4B] pt-16">
+    <div className="min-h-screen bg-[#0D0D0D] pt-16 font-mono text-[#F8F8F2]">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl font-bold text-white mb-2">Your AI-Code Reviewer</h1>
-          <h2 className="text-2xl font-bold mb-4">
-            <span className="text-white">SMART</span>
-            <span className="text-blue-500">.FAST</span>
-            <span className="text-white">.RELIABLE</span>
-          </h2>
-          
-          <p className="text-gray-400 mb-6">
-            This AI-powered code reviewer helps you review your code for
-            syntax errors, logical errors, and security vulnerabilities.
+          <h1 className="text-5xl font-extrabold text-[#FF00E5] mb-3 drop-shadow-[0_0_10px_#FF00E5]">AI-Powered CodeMentor</h1>
+          <h2 className="text-2xl font-bold mb-6 text-[#FF44CC]">SMART<span className="text-[#FF00E5]">.FAST</span>.RELIABLE</h2>
+
+          <p className="text-[#B8B8FF] mb-8 text-lg leading-relaxed">
+            Scan your code for syntax errors, logic mishaps, and potential vulnerabilities using AI.
           </p>
 
-          <form onSubmit={handleSubmit} className="mb-6">
-            {/* Added title for the code input area */}
-            <label className="block text-white text-lg font-medium mb-2">Write or paste your code:</label>
-            <div className="bg-[#1A2233] rounded-lg p-4 mb-4">
+          <form onSubmit={handleSubmit} className="mb-8 space-y-4">
+            <label className="block text-[#FF00E5] text-lg font-medium">Enter your code:</label>
+            <div className="bg-[#0D0D0D] rounded-lg p-4 border border-[#FF00E5] shadow-[0_0_20px_#FF00E5]">
               <textarea
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
-                className="w-full h-64 bg-transparent text-gray-300 font-mono text-sm focus:outline-none resize-none"
+                className="w-full h-64 bg-transparent text-[#F8F8F2] font-mono text-sm focus:outline-none resize-none placeholder-[#888]"
                 placeholder="Paste your code here..."
               />
             </div>
-            
+
             <button
               type="submit"
               disabled={isAnalyzing || !code.trim()}
-              className="bg-[#7C3AED] hover:bg-[#6D28D9] text-white px-6 py-3 rounded-md font-medium flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-[#FF00E5] hover:bg-[#FF44CC] text-white px-6 py-3 rounded-lg font-bold flex items-center justify-center transition duration-300 transform hover:scale-105 disabled:opacity-50"
             >
               {isAnalyzing ? (
                 <>
@@ -81,166 +70,65 @@ const CodeReview = () => {
                 </>
               ) : (
                 <>
-                  Generate Review <ArrowRight size={18} className="ml-2" />
+                  Review Code <ArrowRight size={18} className="ml-2" />
                 </>
               )}
             </button>
           </form>
 
           {error && (
-            <div className="bg-red-500/10 border border-red-500 rounded-lg p-4 mb-4">
-              <p className="text-red-500">{error}</p>
+            <div className="bg-red-800/20 border border-red-500 rounded-lg p-4 mb-6 text-red-400">
+              {error}
             </div>
           )}
 
           {analysis && (
-            <div className="animate-fadeIn">
-              <h3 className="text-2xl font-bold text-white mb-4">AI-Code Review</h3>
-              
-              <div className="space-y-4">
-               <div className="bg-[#1a2233] rounded-lg p-5 border border-gray-700">
-                  <h4 className="text-lg font-medium text-white mb-3">Issues Identified:</h4>
-                  <div className="space-y-3">
-                    {analysis?.issues && Array.isArray(analysis.issues) && analysis.issues.length > 0 ? (
-                      analysis.issues.map((issue, index) => (
-                        <div key={index}>
-                          <h5>{issue.title}</h5>
-                          <p>{issue.description}</p>
-                        </div>
-                      ))
-                    ) : (
-                      analysis?.review && (
-                        <div>
-                          <h4 className="text-lg font-medium text-white mb-3">AI Review:</h4>
-                          <div
-                            className="text-gray-400 whitespace-pre-line prose prose-invert"
-                            style={{ whiteSpace: "pre-wrap" }}
-                            dangerouslySetInnerHTML={{ __html: formatMarkdown(analysis.review) }}
-                          />
-                        </div>
-                      )
-                    )}
-                  </div>
+            <div className="animate-fadeIn space-y-8">
+              <h3 className="text-3xl font-bold text-[#FF00E5] drop-shadow-[0_0_8px_#FF00E5]">AI Review</h3>
+
+              {analysis?.issues && analysis.issues.length > 0 && (
+                <div className="bg-[#0D0D0D] border border-[#FF44CC] rounded-lg p-5 space-y-5 shadow-[0_0_15px_#FF44CC]">
+                  <h4 className="text-lg font-semibold text-[#FF44CC]">Issues Found:</h4>
+                  {analysis.issues.map((issue, index) => (
+                    <div key={index} className="space-y-1">
+                      <h5 className="text-[#F8F8F2] font-semibold">{issue.title}</h5>
+                      <p className="text-[#B8B8FF] text-sm leading-relaxed">{issue.description}</p>
+                    </div>
+                  ))}
                 </div>
+              )}
 
-                {/* Only render recommendation if it exists */}
-                {analysis?.recommendation && (
-                  <div className="bg-[#1a2233] rounded-lg p-5 border border-gray-700">
-                    <div className="flex items-center mb-3">
-                      <CheckCircle size={20} className="text-green-500 mr-2" />
-                      <h4 className="text-lg font-medium text-white">{analysis.recommendation.title}</h4>
-                    </div>
-                    
-                    <div>
-                      <pre className="bg-[#0d1117] rounded-md p-4 mb-2 overflow-x-auto border border-gray-800">
-                        <code className="text-green-400">{analysis.recommendation.code}</code>
-                      </pre>
-                      
-                      {/* Standalone copy button - NOT positioned absolutely */}
-                      <div className="flex justify-end mb-4">
-                        <button 
-                          onClick={() => handleCopyCode(analysis.recommendation.code)}
-                          className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transform transition hover:scale-105"
-                        >
-                          {copySuccess ? (
-                            <>
-                              <Check size={20} className="text-white" />
-                              <span className="font-medium">Copied!</span>
-                            </>
-                          ) : (
-                            <>
-                              <Copy size={20} className="text-white" />
-                              <span className="font-medium">Copy Improved Code</span>
-                            </>
-                          )}
-                        </button>
-                      </div>
-                      
-                      <p className="text-gray-400">{analysis.recommendation.explanation}</p>
-                    </div>
+              {analysis?.review && (
+                <div className="bg-[#0D0D0D] border border-[#FF00E5] rounded-lg p-5 shadow-[0_0_15px_#FF00E5]">
+                  <div
+                    className="text-[#B8B8FF] prose prose-invert prose-sm"
+                    dangerouslySetInnerHTML={{ __html: formatMarkdown(analysis.review) }}
+                  />
+                </div>
+              )}
+
+              {analysis?.recommendation && (
+                <div className="bg-[#1F103F] border border-[#FF00E5] rounded-lg p-5 shadow-[0_0_15px_#FF00E5]">
+                  <div className="flex items-center mb-4">
+                    <CheckCircle size={24} className="text-green-500 mr-2" />
+                    <h4 className="text-lg font-semibold text-[#F8F8F2]">{analysis.recommendation.title}</h4>
                   </div>
-                )}
-              </div>
-
-              {/* New Improved Code section */}
-              {analysis.recommendation && (
-                <div className="bg-[#1a2233] rounded-lg p-5 border border-gray-700 mb-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <h4 className="text-lg font-medium text-white">Improved Code</h4>
-                    <button 
+                  <pre className="bg-[#0D0221] rounded-md p-4 mb-4 text-green-400 border border-[#FF00E5] overflow-x-auto text-sm">
+                    <code>{analysis.recommendation.code}</code>
+                  </pre>
+                  <div className="flex justify-end">
+                    <button
                       onClick={() => handleCopyCode(analysis.recommendation.code)}
-                      className="copy-button"
+                      className="bg-[#FF00E5] hover:bg-[#FF44CC] text-black px-4 py-2 rounded-lg font-bold flex items-center gap-2 transition transform hover:scale-105"
                     >
-                      {copySuccess ? (
-                        <>
-                          <Check size={24} className="text-white" />
-                          <span>Copied!</span>
-                        </>
-                      ) : (
-                        <>
-                          <Copy size={24} className="text-white" />
-                          <span>Copy Code</span>
-                        </>
-                      )}
+                      {copySuccess ? <><Check size={20} /> Copied!</> : <><Copy size={20} /> Copy Code</>}
                     </button>
                   </div>
-                  
-                  <div className="relative">
-                    <pre className="bg-[#0d1117] rounded-md p-4 overflow-x-auto border border-gray-800">
-                      <code className="text-green-400">{analysis.recommendation.code}</code>
-                    
-                      <div className="absolute top-2 right-2">
-                        <button 
-                          onClick={() => handleCopyCode(analysis.recommendation.code)}
-                          className="bg-red-600 text-white px-4 py-2 rounded-md font-bold border-2 border-white"
-                        >
-                          <Copy size={24} />
-                          <span>COPY</span>
-                        </button>
-                      </div>
-                    </pre>
-                  </div>
-
-                  <div style={{
-                    position: 'absolute',
-                    top: '10px',
-                    right: '10px',
-                    zIndex: 1000
-                  }}>
-                    <button 
-                      onClick={() => handleCopyCode(analysis.recommendation.code)}
-                      style={{
-                        backgroundColor: '#FF3E00',
-                        color: 'white',
-                        padding: '10px 20px',
-                        borderRadius: '8px',
-                        fontWeight: 'bold',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        cursor: 'pointer',
-                        border: '3px solid white',
-                        boxShadow: '0 4px 10px rgba(0,0,0,0.5)'
-                      }}
-                    >
-                      <Copy size={24} style={{color: 'white'}} />
-                      <span style={{fontSize: '16px'}}>COPY</span>
-                    </button>
-                  </div>
+                  <p className="text-[#B8B8FF] mt-3 text-sm leading-relaxed">{analysis.recommendation.explanation}</p>
                 </div>
               )}
             </div>
           )}
-
-          {/* New TEST BUTTON section */}
-          <div className="mt-4 mb-4">
-            <button 
-              onClick={() => alert('Test button clicked!')}
-              className="bg-red-500 p-3 text-white"
-            >
-              TEST BUTTON
-            </button>
-          </div>
         </div>
       </div>
     </div>
@@ -248,7 +136,7 @@ const CodeReview = () => {
 };
 
 function formatMarkdown(md) {
-  return marked.parse(md || "");
+  return marked.parse(md || '');
 }
 
 export default CodeReview;

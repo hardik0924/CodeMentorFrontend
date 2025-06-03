@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { AlertTriangle, CheckCircle, XCircle, Code as CodeIcon } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { AlertTriangle, CheckCircle, XCircle, Code as CodeIcon } from "lucide-react";
 
 const CodeExample = () => {
-  const [activeTab, setActiveTab] = useState('bad');
+  const [activeTab, setActiveTab] = useState("bad");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [showAnalysis, setShowAnalysis] = useState(false);
 
   useEffect(() => {
-    if (activeTab === 'bad') {
+    if (activeTab === "bad") {
       setIsAnalyzing(true);
       setShowAnalysis(false);
       const timer = setTimeout(() => {
@@ -38,81 +38,82 @@ for i in range(1, 6):
   `.trim();
 
   return (
-    <section id="examples" className="py-20 bg-[#0d1117]">
+    <section id="examples" className="py-24 bg-[#0D0D0D]">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-white mb-4">AI-Code Mentoring</h2>
-          <p className="text-gray-400 text-xl max-w-2xl mx-auto">
-            See how our AI provides intelligent code mentoring by analyzing your code and offering personalized guidance.
+          <h2 className="text-4xl font-bold text-white mb-4 drop-shadow-[0_0_10px_#ec4899]">
+            AI Code Mentoring
+          </h2>
+          <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+            See how our AI reviews code and offers actionable improvements.
           </p>
         </div>
 
-        <div className="max-w-4xl mx-auto bg-[#161b22] rounded-lg border border-gray-800 overflow-hidden">
+        <div className="max-w-4xl mx-auto bg-[#0D0D0D] backdrop-blur rounded-2xl border border-pink-600/30 shadow-[0_0_20px_#ec489933] overflow-hidden">
           <div className="flex border-b border-gray-800">
-            <button
-              className={`flex-1 py-4 text-center font-medium transition-colors ${
-                activeTab === 'bad' ? 'bg-[#161b22] text-white' : 'bg-[#0d1117] text-gray-400 hover:text-gray-300'
-              }`}
-              onClick={() => setActiveTab('bad')}
-            >
-              Code Sample
-            </button>
-            <button
-              className={`flex-1 py-4 text-center font-medium transition-colors ${
-                activeTab === 'good' ? 'bg-[#161b22] text-white' : 'bg-[#0d1117] text-gray-400 hover:text-gray-300'
-              }`}
-              onClick={() => setActiveTab('good')}
-            >
-              Improved Version
-            </button>
+            {["bad", "good"].map((tab) => (
+              <button
+                key={tab}
+                className={`flex-1 py-4 text-center text-sm font-medium transition-colors ${
+                  activeTab === tab
+                    ? "bg-gray-800 text-pink-400 border-b-2 border-pink-500"
+                    : "bg-gray-950 text-gray-400 hover:text-gray-300"
+                }`}
+                onClick={() => setActiveTab(tab)}
+              >
+                {tab === "bad" ? "Code Sample" : "Improved Version"}
+              </button>
+            ))}
           </div>
 
           <div className="p-6">
-            <div className="bg-[#0d1117] rounded-md p-4 font-mono text-sm relative overflow-hidden">
-              <pre className="text-gray-300">
-                <code>
-                  {activeTab === 'bad' ? badCode : goodCode}
-                </code>
+            <div className="bg-gray-950/70 rounded-lg p-4 font-mono text-sm relative overflow-hidden border border-gray-800 shadow-inner shadow-pink-500/10">
+              <pre className="text-gray-300 whitespace-pre-wrap">
+                <code>{activeTab === "bad" ? badCode : goodCode}</code>
               </pre>
 
               {isAnalyzing && (
-                <div className="absolute inset-0 bg-[#0d1117]/80 flex items-center justify-center">
+                <div className="absolute inset-0 bg-gray-950/95 flex items-center justify-center">
                   <div className="flex flex-col items-center">
-                    <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mb-2"></div>
-                    <p className="text-blue-500 font-medium">Analyzing code...</p>
+                    <div class="w-8 h-8 border-2 border-[#e82ef9] border-t-transparent rounded-full animate-spin mb-2"></div>
+                    <p class="text-[#e82ef9] font-medium">Analyzing code...</p>
                   </div>
                 </div>
               )}
             </div>
 
-            {activeTab === 'bad' && showAnalysis && (
-              <div className="mt-6 space-y-6 animate-fadeIn">
+            {activeTab === "bad" && showAnalysis && (
+              <div className="mt-8 space-y-8 animate-fadeIn">
                 <div className="flex items-start">
-                  <div className="flex-shrink-0 mr-3 mt-1">
-                    <AlertTriangle size={20} className="text-blue-500" />
-                  </div>
+                  <AlertTriangle size={24} className="text-yellow-400 mr-3 mt-1 drop-shadow-[0_0_8px_#facc15]" />
                   <div>
-                    <h3 className="font-medium text-white text-lg mb-1">Issues Identified:</h3>
+                    <h3 className="text-lg font-semibold text-white mb-1">Issues Found:</h3>
                     <ul className="space-y-4">
                       <li className="flex items-start">
-                        <XCircle size={18} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />
+                        <XCircle size={18} className="text-rose-500 mr-2 mt-0.5" />
                         <div>
-                          <p className="text-red-500 font-medium">Infinite Loop Potential:</p>
-                          <p className="text-gray-400">While this specific code will terminate, it's structured in a way that could easily lead to infinite loops if the increment (i += 1) is misplaced or conditional.</p>
+                          <p className="text-rose-400 font-medium">Infinite Loop Risk</p>
+                          <p className="text-gray-400">
+                            Structure allows potential infinite loop if increment is altered.
+                          </p>
                         </div>
                       </li>
                       <li className="flex items-start">
-                        <XCircle size={18} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />
+                        <XCircle size={18} className="text-rose-500 mr-2 mt-0.5" />
                         <div>
-                          <p className="text-red-500 font-medium">Readability:</p>
-                          <p className="text-gray-400">The break statement, while functional, can sometimes make code harder to follow. It's like a sudden plot twist in a story - it works, but you need to pay close attention.</p>
+                          <p className="text-rose-400 font-medium">Poor Readability</p>
+                          <p className="text-gray-400">
+                            Sudden <code className="text-rose-400">break</code> disrupts flow and readability.
+                          </p>
                         </div>
                       </li>
                       <li className="flex items-start">
-                        <XCircle size={18} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />
+                        <XCircle size={18} className="text-rose-500 mr-2 mt-0.5" />
                         <div>
-                          <p className="text-red-500 font-medium">Lack of Clarity:</p>
-                          <p className="text-gray-400">The code doesn't clearly communicate its intent. What are we trying to achieve? Print numbers until we hit 3?</p>
+                          <p className="text-rose-400 font-medium">Unclear Purpose</p>
+                          <p className="text-gray-400">
+                            The goal of the loop isn't communicated well to readers.
+                          </p>
                         </div>
                       </li>
                     </ul>
@@ -120,50 +121,45 @@ for i in range(1, 6):
                 </div>
 
                 <div className="flex items-start">
-                  <div className="flex-shrink-0 mr-3 mt-1">
-                    <CheckCircle size={20} className="text-green-500" />
-                  </div>
+                  <CheckCircle size={24} className="text-emerald-400 mr-3 mt-1 drop-shadow-[0_0_8px_#34d399]" />
                   <div>
-                    <h3 className="font-medium text-white text-lg mb-1">Recommended Fix:</h3>
-                    <p className="text-gray-400 mb-3">Use a for loop with range to clearly express intent:</p>
-                    <div className="bg-[#0d1117] rounded-md p-4 font-mono text-sm">
-                      <pre className="text-green-400">
-                        <code>
-                          {goodCode}
-                        </code>
+                    <h3 className="text-lg font-semibold text-white mb-1">Recommended Fix:</h3>
+                    <p className="text-gray-400 mb-3">Use a <code className="text-emerald-400">for</code> loop with range:</p>
+                    <div className="bg-gray-900/60 border border-emerald-600/40 rounded-lg p-4 font-mono text-sm shadow-[0_0_15px_#34d39922]">
+                      <pre className="text-emerald-400 whitespace-pre-wrap">
+                        <code>{goodCode}</code>
                       </pre>
                     </div>
                   </div>
                 </div>
 
                 <div className="flex items-start">
-                  <div className="flex-shrink-0 mr-3 mt-1">
-                    <CodeIcon size={20} className="text-blue-500" />
-                  </div>
+                  <CodeIcon size={24} className="text-sky-400 mr-3 mt-1 drop-shadow-[0_0_8px_#38bdf8]" />
                   <div>
-                    <h3 className="font-medium text-white text-lg mb-1">Why It's Better:</h3>
-                    <ul className="space-y-2">
+                    <h3 className="text-lg font-semibold text-white mb-1">Why This is Better:</h3>
+                    <ul className="space-y-3">
                       <li className="flex items-start">
-                        <CheckCircle size={16} className="text-green-500 mr-2 mt-1 flex-shrink-0" />
+                        <CheckCircle size={18} className="text-emerald-400 mr-2 mt-0.5" />
                         <p className="text-gray-400">
-                          <span className="text-white font-medium">Clarity and Intent:</span> The for loop version clearly expresses the intent to iterate from 1 to 5.
+                          <span className="font-medium text-white">Clear Intent:</span> For loop clearly expresses iteration.
                         </p>
                       </li>
                       <li className="flex items-start">
-                        <CheckCircle size={16} className="text-green-500 mr-2 mt-1 flex-shrink-0" />
+                        <CheckCircle size={18} className="text-emerald-400 mr-2 mt-0.5" />
                         <p className="text-gray-400">
-                          <span className="text-white font-medium">Reduced Risk of Infinite Loops:</span> for loops inherently handle the iteration variable, reducing the chances of forgetting to increment it.
+                          <span className="font-medium text-white">Safe Increment:</span> No infinite loop risk.
                         </p>
                       </li>
                       <li className="flex items-start">
-                        <CheckCircle size={16} className="text-green-500 mr-2 mt-1 flex-shrink-0" />
+                        <CheckCircle size={18} className="text-emerald-400 mr-2 mt-0.5" />
                         <p className="text-gray-400">
-                          <span className="text-white font-medium">Readability:</span> The for loop is often more readable when you have a known range or sequence to iterate over.
+                          <span className="font-medium text-white">Improved Readability:</span> Simpler, clearer, and easier to maintain.
                         </p>
                       </li>
                     </ul>
                   </div>
                 </div>
+
               </div>
             )}
           </div>
