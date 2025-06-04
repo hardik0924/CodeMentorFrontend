@@ -1,7 +1,11 @@
 import { ArrowRight, XCircle, AlertTriangle, CheckCircle, Copy, Check } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { analyzeCode } from '../utils/gemini';
 import { marked } from 'marked';
+const isCodeLike = (input) => {
+  const codePatterns = /(if|for|while|def|class|public|static|void|int|String|return|console\.log|System\.out\.println|\{|\}|\(|\)|=|;)/;
+  return codePatterns.test(input);
+};
 
 const CodeReview = () => {
   const [code, setCode] = useState('');
@@ -9,6 +13,21 @@ const CodeReview = () => {
   const [analysis, setAnalysis] = useState(null);
   const [error, setError] = useState(null);
   const [copySuccess, setCopySuccess] = useState(false);
+const [reviewCount, setReviewCount] = useState(0);
+const maxReviews = 5;
+useEffect(() => {
+  const today = new Date().toLocaleDateString();
+  const storedDate = localStorage.getItem("lastReviewDate");
+  let count = parseInt(localStorage.getItem("reviewCount")) || 0;
+
+  if (storedDate !== today) {
+    count = 0;
+    localStorage.setItem("lastReviewDate", today);
+    localStorage.setItem("reviewCount", count);
+  }
+
+  setReviewCount(count);
+}, []);
 
   const handleCopyCode = (textToCopy) => {
     navigator.clipboard.writeText(textToCopy)
@@ -22,19 +41,45 @@ const CodeReview = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsAnalyzing(true);
-    setError(null);
-    setAnalysis(null);
-    try {
-      const result = await analyzeCode(code);
-      setAnalysis(result);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setIsAnalyzing(false);
-    }
-  };
+  e.preventDefault();
+  setIsAnalyzing(true);
+  setError(null);
+  setAnalysis(null);
+
+  // Track review count and date
+  const today = new Date().toLocaleDateString();
+  const storedDate = localStorage.getItem("lastReviewDate");
+  let reviewCount = parseInt(localStorage.getItem("reviewCount")) || 0;
+
+  // If it's a new day, reset the count
+  if (storedDate !== today) {
+   reviewCount++;
+localStorage.setItem("reviewCount", reviewCount);
+setReviewCount(reviewCount);
+  }
+
+  // Check limit
+  if (reviewCount >= 3) {
+    setError("⚠️ You’ve reached your daily 3-review limit. Please come back tomorrow for more code reviews!");
+    setIsAnalyzing(false);
+    return;
+  }
+
+  try {
+    const result = await analyzeCode(code);
+    setAnalysis(result);
+    // Increment review count
+    reviewCount++;
+    localStorage.setItem("reviewCount", reviewCount);
+  } catch (err) {
+    setError("🚨 Server is busy or something went wrong. Try again in a while.");
+  } finally {
+    setIsAnalyzing(false);
+  }
+};
+
+
+
 
   return (
     <div className="min-h-screen bg-[#0D0D0D] pt-16 font-mono text-[#F8F8F2]">
@@ -56,6 +101,7 @@ const CodeReview = () => {
                 className="w-full h-64 bg-transparent text-[#F8F8F2] font-mono text-sm focus:outline-none resize-none placeholder-[#888]"
                 placeholder="Paste your code here..."
               />
+              
             </div>
 
             <button
@@ -74,6 +120,10 @@ const CodeReview = () => {
                 </>
               )}
             </button>
+            <p className="text-[#FF44CC] mb-4">
+  📝 {3 - reviewCount} free reviews remaining for today.
+</p>
+
           </form>
 
           {error && (

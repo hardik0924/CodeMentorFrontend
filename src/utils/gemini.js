@@ -8,7 +8,7 @@ export const analyzeCode = async (code) => {
   });
 
   if (!response.ok) {
-    throw new Error('Failed to analyze code');
+    throw new Error('Server is currently handling high traffic. Please retry after a while.');
   }
 
   return response.json();
