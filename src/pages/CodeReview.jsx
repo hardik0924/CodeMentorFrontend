@@ -41,10 +41,10 @@ const CodeReview = () => {
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-5xl font-extrabold text-[#FF00E5] mb-3 drop-shadow-[0_0_10px_#FF00E5]">AI-Powered CodeMentor</h1>
-          <h2 className="text-2xl font-bold mb-6 text-[#FF44CC]">SMART<span className="text-[#FF00E5]">.FAST</span>.RELIABLE</h2>
+          <h2 className="text-2xl font-bold mb-6 text-[#FF44CC]">SPOT BUGS<span className="text-[#FF00E5]">.FIX FAST</span>.LEVEL UP</h2>
 
-          <p className="text-[#B8B8FF] mb-8 text-lg leading-relaxed">
-            Scan your code for syntax errors, logic mishaps, and potential vulnerabilities using AI.
+          <p className="text-[#B8B8FF] mb-8 text-lg leading-relaxed tracking-wide">
+           Instantly review your code for syntax errors, logical flaws, and potential risks with AI-powered insights.
           </p>
 
           <form onSubmit={handleSubmit} className="mb-8 space-y-4">
@@ -84,49 +84,54 @@ const CodeReview = () => {
 
           {analysis && (
             <div className="animate-fadeIn space-y-8">
-              <h3 className="text-3xl font-bold text-[#FF00E5] drop-shadow-[0_0_8px_#FF00E5]">AI Review</h3>
+              <h3 className="text-3xl font-bold text-[#FF00E5] drop-shadow-[0_0_8px_#FF00E5]">AI Code Review Result</h3>
 
+              {/* Issues Found */}
               {analysis?.issues && analysis.issues.length > 0 && (
-                <div className="bg-[#0D0D0D] border border-[#FF44CC] rounded-lg p-5 space-y-5 shadow-[0_0_15px_#FF44CC]">
-                  <h4 className="text-lg font-semibold text-[#FF44CC]">Issues Found:</h4>
+                <div className="bg-[#0D0D0D] border border-[#FF44CC] rounded-lg p-6 space-y-5 shadow-[0_0_15px_#FF44CC]">
+                  <h4 className="text-xl font-semibold text-[#FF44CC] drop-shadow-[0_0_5px_#FF00E5]">Issues Found:</h4>
                   {analysis.issues.map((issue, index) => (
                     <div key={index} className="space-y-1">
-                      <h5 className="text-[#F8F8F2] font-semibold">{issue.title}</h5>
-                      <p className="text-[#B8B8FF] text-sm leading-relaxed">{issue.description}</p>
+                      <h5 className="text-[#F8F8F2] text-lg font-semibold">{issue.title}</h5>
+                      <p className="text-[#D0CFFF] text-base leading-relaxed tracking-wide">{issue.description}</p>
                     </div>
                   ))}
                 </div>
               )}
 
+              {/* AI Review Summary */}
               {analysis?.review && (
-                <div className="bg-[#0D0D0D] border border-[#FF00E5] rounded-lg p-5 shadow-[0_0_15px_#FF00E5]">
+                <div className="bg-[#0D0D0D] border border-[#FF00E5] rounded-lg p-6 shadow-[0_0_15px_#FF00E5]">
+                  <h4 className="text-xl font-semibold text-[#F8F8F2] drop-shadow-[0_0_5px_#FF00E5] mb-4">AI Review Summary:</h4>
                   <div
-                    className="text-[#B8B8FF] prose prose-invert prose-sm"
+                    className="text-[#D0CFFF] prose prose-invert prose-base leading-relaxed tracking-wide"
                     dangerouslySetInnerHTML={{ __html: formatMarkdown(analysis.review) }}
                   />
                 </div>
               )}
 
+              {/* 5️⃣ Improved Code Example */}
               {analysis?.recommendation && (
-                <div className="bg-[#1F103F] border border-[#FF00E5] rounded-lg p-5 shadow-[0_0_15px_#FF00E5]">
-                  <div className="flex items-center mb-4">
-                    <CheckCircle size={24} className="text-green-500 mr-2" />
-                    <h4 className="text-lg font-semibold text-[#F8F8F2]">{analysis.recommendation.title}</h4>
-                  </div>
-                  <pre className="bg-[#0D0221] rounded-md p-4 mb-4 text-green-400 border border-[#FF00E5] overflow-x-auto text-sm">
-                    <code>{analysis.recommendation.code}</code>
-                  </pre>
-                  <div className="flex justify-end">
-                    <button
-                      onClick={() => handleCopyCode(analysis.recommendation.code)}
-                      className="bg-[#FF00E5] hover:bg-[#FF44CC] text-black px-4 py-2 rounded-lg font-bold flex items-center gap-2 transition transform hover:scale-105"
-                    >
-                      {copySuccess ? <><Check size={20} /> Copied!</> : <><Copy size={20} /> Copy Code</>}
-                    </button>
-                  </div>
-                  <p className="text-[#B8B8FF] mt-3 text-sm leading-relaxed">{analysis.recommendation.explanation}</p>
-                </div>
-              )}
+  <div className="bg-[#1F103F] border border-[#FF00E5] rounded-lg p-6 shadow-[0_0_15px_#FF00E5]">
+    <div className="flex items-center mb-4">
+      <CheckCircle size={24} className="text-green-500 mr-2" />
+      <h4 className="text-xl font-semibold text-[#F8F8F2] drop-shadow-[0_0_5px_#FF00E5]">5️⃣ Improved Code Example:</h4>
+    </div>
+    <pre className="bg-[#0D0221] rounded-md p-5 mb-4 text-green-300 border border-[#FF00E5] overflow-x-auto text-base leading-relaxed">
+      <code>{analysis.recommendation.code}</code>
+    </pre>
+    <div className="flex justify-end">
+      <button
+        onClick={() => handleCopyCode(analysis.recommendation.code)}
+        className="bg-[#FF00E5] hover:bg-[#FF44CC] text-black px-4 py-2 rounded-lg font-bold flex items-center gap-2 transition transform hover:scale-105"
+      >
+        {copySuccess ? <><Check size={20} /> Copied!</> : <><Copy size={20} /> Copy Code</>}
+      </button>
+    </div>
+    <p className="text-[#D0CFFF] mt-3 text-base leading-relaxed tracking-wide">{analysis.recommendation.explanation}</p>
+  </div>
+)}
+
             </div>
           )}
         </div>

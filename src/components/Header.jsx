@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Github, Menu, X } from 'lucide-react';
+import { Linkedin, Menu, X } from 'lucide-react';  // 👈 replaced Github with Linkedin
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -41,12 +41,12 @@ const Header = () => {
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center space-x-8">
           <a 
-            href="https://github.com" 
+            href="www.linkedin.com/in/hardik-baviskar22"   // 👈 your actual LinkedIn profile or page link here
             target="_blank" 
             rel="noopener noreferrer"
             className="bg-[#FF00FF] hover:bg-[#D100D1] text-[#0D0D0D] px-4 py-2 rounded-lg flex items-center transition-all duration-300 shadow-[0_0_20px_#FF00FF] font-medium"
           >
-            <Github size={18} className="mr-2" /> GitHub
+            <Linkedin size={18} className="mr-2" /> LinkedIn
           </a>
         </nav>
 
@@ -63,7 +63,7 @@ const Header = () => {
       {isMenuOpen && (
         <div className="md:hidden bg-[#0D0D0D] border-t border-[#FF00FF] shadow-[0_0_20px_#FF00FF]">
           <div className="container mx-auto px-4 py-6 flex flex-col space-y-5">
-            <a 
+            {/* <a 
               href="#features" 
               className="text-[#F5F5F5] hover:text-[#FF00FF] text-lg font-medium transition-colors"
               onClick={() => setIsMenuOpen(false)}
@@ -83,15 +83,15 @@ const Header = () => {
               onClick={() => setIsMenuOpen(false)}
             >
               Examples
-            </a>
+            </a> */}
             <a 
-              href="https://github.com" 
+              href="www.linkedin.com/in/hardik-baviskar22"   // 👈 your LinkedIn link here too
               target="_blank" 
               rel="noopener noreferrer"
               className="bg-[#FF00FF] hover:bg-[#D100D1] text-[#0D0D0D] px-4 py-3 rounded-lg flex items-center justify-center transition-all duration-300 shadow-[0_0_20px_#FF00FF] font-medium"
               onClick={() => setIsMenuOpen(false)}
             >
-              <Github size={18} className="mr-2" /> GitHub
+              <Linkedin size={18} className="mr-2" /> LinkedIn
             </a>
           </div>
         </div>
