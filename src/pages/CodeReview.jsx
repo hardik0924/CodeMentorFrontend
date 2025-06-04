@@ -42,35 +42,47 @@ useEffect(() => {
 
   const handleSubmit = async (e) => {
   e.preventDefault();
-  setIsAnalyzing(true);
   setError(null);
   setAnalysis(null);
 
-  // Track review count and date
+  if (!code.trim()) {
+    setError("Please enter some code to review.");
+    return;
+  }
+
+  if (!isCodeLike(code)) {
+    setError("This doesn’t look like code. Please enter valid code to review.");
+    return;
+  }
+
   const today = new Date().toLocaleDateString();
   const storedDate = localStorage.getItem("lastReviewDate");
-  let reviewCount = parseInt(localStorage.getItem("reviewCount")) || 0;
+  let currentReviewCount = parseInt(localStorage.getItem("reviewCount")) || 0;
 
-  // If it's a new day, reset the count
+  // If new day — reset count
   if (storedDate !== today) {
-   reviewCount++;
-localStorage.setItem("reviewCount", reviewCount);
-setReviewCount(reviewCount);
+    currentReviewCount = 0;
+    localStorage.setItem("lastReviewDate", today);
+    localStorage.setItem("reviewCount", currentReviewCount);
   }
 
   // Check limit
-  if (reviewCount >= 3) {
+  if (currentReviewCount >= maxReviews) {
     setError("⚠️ You’ve reached your daily 3-review limit. Please come back tomorrow for more code reviews!");
-    setIsAnalyzing(false);
     return;
   }
+
+  setIsAnalyzing(true);
 
   try {
     const result = await analyzeCode(code);
     setAnalysis(result);
-    // Increment review count
-    reviewCount++;
-    localStorage.setItem("reviewCount", reviewCount);
+
+    // Increment review count only after successful review
+    currentReviewCount++;
+    localStorage.setItem("reviewCount", currentReviewCount);
+    setReviewCount(currentReviewCount);
+
   } catch (err) {
     setError("🚨 Server is busy or something went wrong. Try again in a while.");
   } finally {
