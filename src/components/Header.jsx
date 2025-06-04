@@ -41,7 +41,7 @@ const Header = () => {
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center space-x-8">
           <a 
-            href="www.linkedin.com/in/hardik-baviskar22"   // 👈 your actual LinkedIn profile or page link here
+            href="https://www.linkedin.com/in/hardik-baviskar22"   // 👈 your actual LinkedIn profile or page link here
             target="_blank" 
             rel="noopener noreferrer"
             className="bg-[#FF00FF] hover:bg-[#D100D1] text-[#0D0D0D] px-4 py-2 rounded-lg flex items-center transition-all duration-300 shadow-[0_0_20px_#FF00FF] font-medium"
@@ -85,7 +85,7 @@ const Header = () => {
               Examples
             </a> */}
             <a 
-              href="www.linkedin.com/in/hardik-baviskar22"   // 👈 your LinkedIn link here too
+              href="https://www.linkedin.com/in/hardik-baviskar22"   // 👈 your LinkedIn link here too
               target="_blank" 
               rel="noopener noreferrer"
               className="bg-[#FF00FF] hover:bg-[#D100D1] text-[#0D0D0D] px-4 py-3 rounded-lg flex items-center justify-center transition-all duration-300 shadow-[0_0_20px_#FF00FF] font-medium"
